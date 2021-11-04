@@ -23,6 +23,8 @@
 
 from flask import Flask, redirect, request
 import json
+import flask
+
 app = Flask(__name__)
 app.debug = True
 
@@ -73,7 +75,7 @@ def flask_post_json():
 @app.route("/")
 def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
-    return redirect("/static/index.html")
+    return redirect("/static/index.html", code=301)
 
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
@@ -86,8 +88,7 @@ def update(entity):
 def world():
     '''you should probably return the world here'''
     result = myWorld.world()
-    return json.dumps(result)
-
+    return flask.make_response(flask.json.jsonify(result), 200)
 @app.route("/entity/<entity>")    
 def get_entity(entity):
     '''This is the GET version of the entity interface, return a representation of the entity'''
